@@ -1,5 +1,5 @@
 homepage: "https://www.usercentrics.com"
 documentation: "https://docs.usercentrics.com/#/gtm-templates"
 versions:
-  - sha: 12327babf490e890510943349184e008ac7d86cc
+  - sha: 12327ba
     changeNotes: Usercentrics GTM template implementation
