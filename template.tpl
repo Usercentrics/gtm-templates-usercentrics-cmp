@@ -1,4 +1,4 @@
-﻿___TERMS_OF_SERVICE___
+___TERMS_OF_SERVICE___
 
 By creating or modifying this file you agree to Google Tag Manager's Community
 Template Gallery Developer Terms of Service available at
@@ -62,6 +62,81 @@ ___TEMPLATE_PARAMETERS___
     "checkboxText": "Enable Accelerated Mobile Pages Framework (AMP)",
     "simpleValueType": true,
     "help": "Sets whether AMP is enabled or not"
+  },
+  {
+    "type": "GROUP",
+    "name": "defaultConsentPreferences",
+    "displayName": "Default Consent State",
+    "groupStyle": "ZIPPY_CLOSED",
+    "subParams": [
+      {
+        "type": "SELECT",
+        "name": "data-analytics-storage",
+        "displayName": "Statistics (consent type analytics_storage)",
+        "macrosInSelect": false,
+        "selectItems": [
+          {
+            "value": "denied",
+            "displayValue": "Denied"
+          },
+          {
+            "value": "granted",
+            "displayValue": "Granted"
+          }
+        ],
+        "simpleValueType": true,
+        "help": "Select default consent state for analytics tags"
+      },
+      {
+        "type": "SELECT",
+        "name": "data-ad-storage",
+        "displayName": "Ads/Marketing (consent type ad_storage)",
+        "macrosInSelect": false,
+        "selectItems": [
+          {
+            "value": "denied",
+            "displayValue": "Denied"
+          },
+          {
+            "value": "granted",
+            "displayValue": "Granted"
+          }
+        ],
+        "simpleValueType": true,
+        "help": "Select default consent state for analytics tags"
+      },
+      {
+        "type": "SELECT",
+        "name": "data-functionality-storage",
+        "displayName": "Preferences (consent types functionality_storage and personalization_storage)",
+        "macrosInSelect": false,
+        "selectItems": [
+          {
+            "value": "denied",
+            "displayValue": "Denied"
+          },
+          {
+            "value": "granted",
+            "displayValue": "Granted"
+          }
+        ],
+        "simpleValueType": true,
+        "help": "Select default consent state for preference tags"
+      }
+    ]
+  },
+  {
+    "type": "TEXT",
+    "name": "waitForUpdate",
+    "displayName": "Wait for update",
+    "simpleValueType": true,
+    "help": "Set how many miliseconds to wait before firing tags waiting for consent",
+    "valueValidators": [
+      {
+        "type": "NON_NEGATIVE_NUMBER"
+      }
+    ],
+    "valueUnit": "ms"
   }
 ]
 
@@ -71,11 +146,20 @@ ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 const injectScript = require('injectScript');
 const queryPermission = require('queryPermission');
 const setInWindow = require('setInWindow');
+const setDefaultConsentState = require('setDefaultConsentState');
 
 const isTcfEnabled = data['data-tcf-enabled'];
 const defaultLanguage = data['data-language'];
 const settingsId = data['data-settings-id'];
 const isAmpEnabled = data['data-amp-enabled'];
+
+setDefaultConsentState({
+  'functionality_storage': data.defaultConsentPreferences['data-functionality-storage'],
+  'analytics_storage': data.defaultConsentAnalytics['data-analytics-storage'],
+  'ad_storage': data.defaultConsentAds['data-ad-storage'],
+  'security_storage': 'granted',
+  'wait_for_update': data.waitForUpdate
+});
 
 let scriptUrl = 'https://app.usercentrics.eu/browser-ui/latest/loader.js';
 
@@ -311,6 +395,16 @@ ___WEB_PERMISSIONS___
       "isEditedByUser": true
     },
     "isRequired": true
+  },
+  {
+    "instance": {
+      "key": {
+        "publicId": "access_consent",
+        "versionId": "1"
+      },
+      "param": []
+    },
+    "isRequired": true
   }
 ]
 
@@ -346,6 +440,4 @@ scenarios:
 
 ___NOTES___
 
-Created on 06/07/2021, 16:03:39
-
-
+Created on 18/11/2021, 00:39:07
