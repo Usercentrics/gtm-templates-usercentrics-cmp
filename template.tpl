@@ -146,19 +146,25 @@ ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 const injectScript = require('injectScript');
 const queryPermission = require('queryPermission');
 const setInWindow = require('setInWindow');
-const setDefaultConsentState = require('setDefaultConsentState');
 
 const isTcfEnabled = data['data-tcf-enabled'];
 const defaultLanguage = data['data-language'];
 const settingsId = data['data-settings-id'];
 const isAmpEnabled = data['data-amp-enabled'];
 
-setDefaultConsentState({
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+
+gtag('consent', 'default', {
   'functionality_storage': data.defaultConsentPreferences['data-functionality-storage'],
   'analytics_storage': data.defaultConsentAnalytics['data-analytics-storage'],
   'ad_storage': data.defaultConsentAds['data-ad-storage'],
   'security_storage': 'granted',
   'wait_for_update': data.waitForUpdate
+});
+
+dataLayer.push({
+  'event': 'default_consent'
 });
 
 let scriptUrl = 'https://app.usercentrics.eu/browser-ui/latest/loader.js';
