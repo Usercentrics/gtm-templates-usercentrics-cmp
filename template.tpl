@@ -95,7 +95,7 @@ ___TEMPLATE_PARAMETERS___
           }
         ],
         "simpleValueType": true,
-        "help": "Select default consent state for analytics tags"
+        "help": "Select default consent state for marketing tags"
       },
       {
         "type": "SELECT",
@@ -155,6 +155,7 @@ setDefaultConsentState({
   'security_storage': 'granted',
   'wait_for_update': makeNumber(data.waitForUpdate)
 });
+
 
 let scriptUrl = 'https://storage.googleapis.com/usercentrics-integration-test-browser-ui/test/EUD-1646/loader.js';
 
@@ -712,5 +713,4 @@ scenarios:
 ___NOTES___
 
 Created on 18/11/2021, 18:01:02
-
 
