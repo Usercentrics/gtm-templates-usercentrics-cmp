@@ -1,5 +1,9 @@
 homepage: "https://www.usercentrics.com"
 documentation: "https://docs.usercentrics.com/#/gtm-templates"
 versions:
-  - sha: 12327ba
+  # Latest version
+  - sha: 6750d555c2aef9dbb034308647059605ab2abd31
+    changeNotes: Added default consent status
+  # Older versions
+  - sha: 12327babf490e890510943349184e008ac7d86cc
     changeNotes: Usercentrics GTM template implementation
