@@ -157,7 +157,7 @@ setDefaultConsentState({
 });
 
 
-let scriptUrl = 'https://storage.googleapis.com/usercentrics-integration-test-browser-ui/test/EUD-1646/loader.js';
+let scriptUrl = 'https://app.usercentrics.eu/browser-ui/latest/loader.js';
 
 setInWindow('settingsId', settingsId);
 
