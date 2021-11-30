@@ -1,3 +1,11 @@
+___TERMS_OF_SERVICE___
+
+By creating or modifying this file you agree to Google Tag Manager's Community
+Template Gallery Developer Terms of Service available at
+https://developers.google.com/tag-manager/gallery-tos (or such other URL as
+Google may provide), as modified from time to time.
+
+
 ___INFO___
 
 {
@@ -95,7 +103,7 @@ ___TEMPLATE_PARAMETERS___
           }
         ],
         "simpleValueType": true,
-        "help": "Select default consent state for marketing tags"
+        "help": "Select default consent state for analytics tags"
       },
       {
         "type": "SELECT",
@@ -156,7 +164,6 @@ setDefaultConsentState({
   'wait_for_update': makeNumber(data.waitForUpdate)
 });
 
-
 let scriptUrl = 'https://app.usercentrics.eu/browser-ui/latest/loader.js';
 
 setInWindow('settingsId', settingsId);
@@ -202,7 +209,7 @@ ___WEB_PERMISSIONS___
             "listItem": [
               {
                 "type": 1,
-                "string": "https://storage.googleapis.com/usercentrics-integration-test-browser-ui/*"
+                "string": "https://app.usercentrics.eu/*"
               }
             ]
           }
@@ -367,84 +374,6 @@ ___WEB_PERMISSIONS___
                   {
                     "type": 1,
                     "string": "language"
-                  },
-                  {
-                    "type": 8,
-                    "boolean": true
-                  },
-                  {
-                    "type": 8,
-                    "boolean": true
-                  },
-                  {
-                    "type": 8,
-                    "boolean": true
-                  }
-                ]
-              },
-              {
-                "type": 3,
-                "mapKey": [
-                  {
-                    "type": 1,
-                    "string": "key"
-                  },
-                  {
-                    "type": 1,
-                    "string": "read"
-                  },
-                  {
-                    "type": 1,
-                    "string": "write"
-                  },
-                  {
-                    "type": 1,
-                    "string": "execute"
-                  }
-                ],
-                "mapValue": [
-                  {
-                    "type": 1,
-                    "string": "gtag"
-                  },
-                  {
-                    "type": 8,
-                    "boolean": true
-                  },
-                  {
-                    "type": 8,
-                    "boolean": true
-                  },
-                  {
-                    "type": 8,
-                    "boolean": true
-                  }
-                ]
-              },
-              {
-                "type": 3,
-                "mapKey": [
-                  {
-                    "type": 1,
-                    "string": "key"
-                  },
-                  {
-                    "type": 1,
-                    "string": "read"
-                  },
-                  {
-                    "type": 1,
-                    "string": "write"
-                  },
-                  {
-                    "type": 1,
-                    "string": "execute"
-                  }
-                ],
-                "mapValue": [
-                  {
-                    "type": 1,
-                    "string": "dataLayer"
                   },
                   {
                     "type": 8,
@@ -712,5 +641,6 @@ scenarios:
 
 ___NOTES___
 
-Created on 18/11/2021, 18:01:02
+Created on 30/11/2021, 17:01:59
+
 
