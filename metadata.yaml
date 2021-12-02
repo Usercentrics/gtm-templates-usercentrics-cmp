@@ -2,9 +2,11 @@ homepage: "https://www.usercentrics.com"
 documentation: "https://docs.usercentrics.com/#/gtm-templates"
 versions:
   # Latest version
+  - sha: cd07d5b38cf89e08d73aa0fcd4e1a964f16a6689
+    changeNotes: Fixed helper text for one field
+  # Older versions
   - sha: c6049ccc62b41d669d2f7536235cc80cbec0983b
     changeNotes: Added terms of service to template
-  # Older versions
   - sha: 6750d555c2aef9dbb034308647059605ab2abd31
     changeNotes: Added default consent status
   - sha: 12327babf490e890510943349184e008ac7d86cc
