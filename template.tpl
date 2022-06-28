@@ -148,21 +148,46 @@ const injectScript = require('injectScript');
 const queryPermission = require('queryPermission');
 const setInWindow = require('setInWindow');
 const setDefaultConsentState = require('setDefaultConsentState');
+const updateConsentState = require('updateConsentState');
 const makeNumber = require('makeNumber');
+const gtagSet = require('gtagSet');
+const localStorage = require('localStorage');
+const JSON = require('JSON');
 
 const isTcfEnabled = data['data-tcf-enabled'];
 const defaultLanguage = data['data-language'];
 const settingsId = data['data-settings-id'];
 const isAmpEnabled = data['data-amp-enabled'];
 
-setDefaultConsentState({
+const defaultConsentState = {
   'functionality_storage': data.consentStorage,
   'personalization_storage': data.consentStorage,
   'analytics_storage': data.consentAnalytics,
   'ad_storage': data.consentAds,
   'security_storage': 'granted',
   'wait_for_update': makeNumber(data.waitForUpdate)
-});
+};
+
+const ucGcmString = localStorage.getItem('uc_gcm');
+let ucGcmData;
+if (ucGcmString) {
+  ucGcmData = JSON.parse(ucGcmString);
+}
+if (typeof ucGcmData === 'object') {
+  if (ucGcmData.adStorage && ucGcmData.analyticsStorage) {
+    updateConsentState({
+      ad_storage: ucGcmData.adStorage,
+      analytics_storage: ucGcmData.analyticsStorage
+    });
+
+    defaultConsentState.wait_for_update = 0;
+  }
+  if (ucGcmData.adsDataRedaction === true || ucGcmData.adsDataRedaction === false) {
+    gtagSet({'ads_data_redaction': ucGcmData.adsDataRedaction });
+  }
+}
+
+setDefaultConsentState(defaultConsentState);
 
 let scriptUrl = 'https://app.usercentrics.eu/browser-ui/latest/loader.js';
 
@@ -374,6 +399,84 @@ ___WEB_PERMISSIONS___
                   {
                     "type": 1,
                     "string": "language"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  }
+                ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "gtag"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  }
+                ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "dataLayer"
                   },
                   {
                     "type": 8,
@@ -606,6 +709,89 @@ ___WEB_PERMISSIONS___
       "isEditedByUser": true
     },
     "isRequired": true
+  },
+  {
+    "instance": {
+      "key": {
+        "publicId": "write_data_layer",
+        "versionId": "1"
+      },
+      "param": [
+        {
+          "key": "keyPatterns",
+          "value": {
+            "type": 2,
+            "listItem": [
+              {
+                "type": 1,
+                "string": "ads_data_redaction"
+              },
+              {
+                "type": 1,
+                "string": "url_passthrough"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "clientAnnotations": {
+      "isEditedByUser": true
+    },
+    "isRequired": true
+  },
+  {
+    "instance": {
+      "key": {
+        "publicId": "access_local_storage",
+        "versionId": "1"
+      },
+      "param": [
+        {
+          "key": "keys",
+          "value": {
+            "type": 2,
+            "listItem": [
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "uc_gcm"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "clientAnnotations": {
+      "isEditedByUser": true
+    },
+    "isRequired": true
   }
 ]
 
@@ -641,6 +827,4 @@ scenarios:
 
 ___NOTES___
 
-Created on 30/11/2021, 17:01:59
-
-
+Created on 28/06/2022, 11:34:02
