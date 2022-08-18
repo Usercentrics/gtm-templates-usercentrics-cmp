@@ -64,80 +64,163 @@ ___TEMPLATE_PARAMETERS___
     "help": "Sets whether AMP is enabled or not"
   },
   {
+    "type": "CHECKBOX",
+    "name": "consentModeEnabled",
+    "checkboxText": "Enable Google Consent Mode",
+    "simpleValueType": true,
+    "defaultValue": true,
+    "help": "Enable Consent Mode if one or more of your tags rely on Google\u0027s consent API. Usercentrics will then automatically signal the user\u0027s consent to these tags. (If you want to disable Consent Mode make sure to turn it of in your CMP configuration as well)",
+    "alwaysInSummary": true
+  },
+  {
     "type": "GROUP",
-    "name": "defaultConsentPreferences",
-    "displayName": "Default Consent State",
+    "name": "ConsentModeSettings",
+    "displayName": "Consent Mode Settings",
     "groupStyle": "NO_ZIPPY",
     "subParams": [
       {
-        "type": "SELECT",
-        "name": "consentAnalytics",
-        "displayName": "Statistics (consent type analytics_storage)",
-        "macrosInSelect": false,
-        "selectItems": [
+        "type": "TEXT",
+        "name": "waitForUpdate",
+        "displayName": "Wait for update",
+        "simpleValueType": true,
+        "valueUnit": "miliseconds",
+        "help": "Set how many miliseconds to wait before firing tags waiting for consent",
+        "defaultValue": 2000,
+        "valueValidators": [
           {
-            "value": "denied",
-            "displayValue": "Denied"
+            "type": "NON_EMPTY"
           },
           {
-            "value": "granted",
-            "displayValue": "Granted"
+            "type": "NON_NEGATIVE_NUMBER"
           }
-        ],
-        "simpleValueType": true,
-        "help": "Select default consent state for analytics tags"
+        ]
       },
       {
         "type": "SELECT",
-        "name": "consentAds",
-        "displayName": "Ads/Marketing (consent type ad_storage)",
-        "macrosInSelect": false,
+        "name": "adsDataRedaction",
+        "displayName": "Redact ads data",
         "selectItems": [
           {
-            "value": "denied",
-            "displayValue": "Denied"
+            "value": true,
+            "displayValue": "True"
           },
           {
-            "value": "granted",
-            "displayValue": "Granted"
+            "value": false,
+            "displayValue": "False"
+          },
+          {
+            "value": "dynamic",
+            "displayValue": "Dynamic (match ad_storage)"
           }
         ],
         "simpleValueType": true,
-        "help": "Select default consent state for marketing tags"
+        "defaultValue": "dynamic",
+        "help": "When ad data redaction is true and marketing cookies are denied, ad click identifiers sent in network requests by Google Ads and Floodlight tags will be redacted. Network requests will also be sent through a cookieless domain"
       },
       {
-        "type": "SELECT",
-        "name": "consentStorage",
-        "displayName": "Preferences (consent types functionality_storage and personalization_storage)",
-        "macrosInSelect": false,
-        "selectItems": [
+        "type": "CHECKBOX",
+        "name": "urlPassthrough",
+        "checkboxText": "Enable URL passthrough",
+        "simpleValueType": true,
+        "help": "When using URL passthrough, a few query parameters may be appended to links as users navigate through pages on your website"
+      },
+      {
+        "type": "GROUP",
+        "name": "DefaultConsent",
+        "displayName": "Default Consent State",
+        "subParams": [
           {
-            "value": "denied",
-            "displayValue": "Denied"
-          },
-          {
-            "value": "granted",
-            "displayValue": "Granted"
+            "type": "PARAM_TABLE",
+            "name": "regionSettings",
+            "paramTableColumns": [
+              {
+                "param": {
+                  "type": "TEXT",
+                  "name": "region",
+                  "displayName": "Region (leave blank to apply globally)",
+                  "simpleValueType": true
+                },
+                "isUnique": true
+              },
+              {
+                "param": {
+                  "type": "SELECT",
+                  "name": "defaultConsentPreferences",
+                  "displayName": "Preferences (functionality_storage and personalization_storage)",
+                  "selectItems": [
+                    {
+                      "value": "denied",
+                      "displayValue": "Denied"
+                    },
+                    {
+                      "value": "granted",
+                      "displayValue": "Granted"
+                    }
+                  ],
+                  "simpleValueType": true,
+                  "help": "Select default consent state for preference tags",
+                  "defaultValue": "denied"
+                },
+                "isUnique": false
+              },
+              {
+                "param": {
+                  "type": "SELECT",
+                  "name": "defaultConsentStatistics",
+                  "displayName": "Statistics (analytics_storage)",
+                  "selectItems": [
+                    {
+                      "value": "denied",
+                      "displayValue": "Denied"
+                    },
+                    {
+                      "value": "granted",
+                      "displayValue": "Granted"
+                    }
+                  ],
+                  "simpleValueType": true,
+                  "defaultValue": "denied",
+                  "help": "Select default consent state for statistics tags"
+                },
+                "isUnique": false
+              },
+              {
+                "param": {
+                  "type": "SELECT",
+                  "name": "defaultConsentMarketing",
+                  "displayName": "Marketing (ad_storage)",
+                  "selectItems": [
+                    {
+                      "value": "denied",
+                      "displayValue": "Denied"
+                    },
+                    {
+                      "value": "granted",
+                      "displayValue": "Granted"
+                    }
+                  ],
+                  "simpleValueType": true,
+                  "defaultValue": "denied",
+                  "help": "Select default consent state for marketing tags"
+                },
+                "isUnique": false
+              }
+            ],
+            "editRowTitle": "Edit region",
+            "newRowButtonText": "Add region",
+            "newRowTitle": "Add region"
           }
         ],
-        "simpleValueType": true,
-        "help": "Select default consent state for preference tags"
-      }
-    ]
-  },
-  {
-    "type": "TEXT",
-    "name": "waitForUpdate",
-    "displayName": "Wait for update",
-    "simpleValueType": true,
-    "help": "Set how many miliseconds to wait before firing tags waiting for consent",
-    "valueValidators": [
-      {
-        "type": "NON_NEGATIVE_NUMBER"
+        "help": "A default consent state of \u0027denied\u0027 will apply until the user has submitted a consent. You can add different default states for users in different geographical regions. Please use ISO-3166-1 alpha-2 country codes for region values."
       }
     ],
-    "valueUnit": "ms",
-    "defaultValue": 2000
+    "enablingConditions": [
+      {
+        "paramName": "consentModeEnabled",
+        "paramValue": true,
+        "type": "EQUALS"
+      }
+    ]
   }
 ]
 
@@ -153,42 +236,114 @@ const makeNumber = require('makeNumber');
 const gtagSet = require('gtagSet');
 const localStorage = require('localStorage');
 const JSON = require('JSON');
+const logToConsole = require('logToConsole');
 
 const isTcfEnabled = data['data-tcf-enabled'];
 const defaultLanguage = data['data-language'];
 const settingsId = data['data-settings-id'];
 const isAmpEnabled = data['data-amp-enabled'];
+const consentModeEnabled = data.consentModeEnabled;
+const regionSettings = data.regionSettings || [];
+const urlPassthrough = data.urlPassthrough;
+const waitForUpdate = data.waitForUpdate;
+const adsDataRedaction = data.adsDataRedaction;
+let hasDefaultState = false;
 
-const defaultConsentState = {
-  'functionality_storage': data.consentStorage,
-  'personalization_storage': data.consentStorage,
-  'analytics_storage': data.consentAnalytics,
-  'ad_storage': data.consentAds,
-  'security_storage': 'granted',
-  'wait_for_update': makeNumber(data.waitForUpdate)
-};
+// Set developer ID
+gtagSet('developer_id.dOThhZD', true);
 
-const ucGcmString = localStorage.getItem('uc_gcm');
-let ucGcmData;
-if (ucGcmString) {
-  ucGcmData = JSON.parse(ucGcmString);
-}
-if (typeof ucGcmData === 'object') {
-  if (ucGcmData.adStorage && ucGcmData.analyticsStorage) {
-    updateConsentState({
-      ad_storage: ucGcmData.adStorage,
-      analytics_storage: ucGcmData.analyticsStorage
+if (consentModeEnabled !== false) {
+  
+
+    // Turn region string ("DK, NL, DE") into array (["DK", "NL", "DE"])
+    const getRegionArr = (regionStr) => {
+        return regionStr.split(',')
+            .map(region => region.trim())
+            .filter(region => region.length !== 0);
+    };
+
+    // Get default consent state per region
+    const getConsentRegionData = (regionObject) => {
+        const regionArr = getRegionArr(regionObject.region);
+      
+        return {
+            region: regionArr,
+            ad_storage: regionObject.defaultConsentMarketing,
+            analytics_storage: regionObject.defaultConsentStatistics,
+            functionality_storage: regionObject.defaultConsentPreferences,
+            personalization_storage: regionObject.defaultConsentPreferences,
+            security_storage: 'granted'
+        };
+    };
+
+    // Set url_passthrough
+    gtagSet({
+        'url_passthrough': urlPassthrough === true
+      
+    });
+ 
+    // Set default consent for each region
+      
+    regionSettings.forEach(regionObj => {
+        const consentRegionData = getConsentRegionData(regionObj);
+        if (waitForUpdate > 0) {
+            consentRegionData.wait_for_update = waitForUpdate;
+        }
+
+        setDefaultConsentState(consentRegionData);
+        if (regionObj.region.trim() === '')
+        {
+          hasDefaultState = true;
+        }
     });
 
-    defaultConsentState.wait_for_update = 0;
-  }
-  if (ucGcmData.adsDataRedaction === true || ucGcmData.adsDataRedaction === false) {
-    gtagSet({'ads_data_redaction': ucGcmData.adsDataRedaction });
-  }
+    // Fallback to opt-out if no global default consent state has been defined in region settings
+    if(!hasDefaultState)
+    {
+      setDefaultConsentState({ad_storage: 'denied', analytics_storage: 'denied', functionality_storage: 'denied', personalization_storage: 'denied', security_storage: 'granted'});
+    }
+    
+
+  // Read existing consent from if it exists
+    const ucGcmString = localStorage.getItem('uc_gcm');
+    let ucGcmData;
+    if (ucGcmString) {
+        ucGcmData = JSON.parse(ucGcmString);
+    }
+    if (typeof ucGcmData === 'object') {
+        if (ucGcmData.adStorage && ucGcmData.analyticsStorage) {
+            updateConsentState({
+            ad_storage: ucGcmData.adStorage,
+            analytics_storage: ucGcmData.analyticsStorage
+            });
+            
+        }
+
+    }
+  
+    // Set data redaction
+    let adsDataRedactionValue = true;
+    if(adsDataRedaction === 'dynamic') {
+      if(ucGcmData && ucGcmData.adStorage) {
+        if(ucGcmData.adStorage === 'granted') {
+          adsDataRedactionValue =  false;
+        }
+        else {
+          adsDataRedactionValue =  true;
+        }        
+      }
+      
+    }
+    else {      
+        adsDataRedactionValue = (adsDataRedaction === true);
+    }
+    gtagSet({
+      'ads_data_redaction': adsDataRedactionValue
+    });
+    
 }
 
-setDefaultConsentState(defaultConsentState);
-
+  
 let scriptUrl = 'https://app.usercentrics.eu/browser-ui/latest/loader.js';
 
 setInWindow('settingsId', settingsId);
@@ -725,6 +880,14 @@ ___WEB_PERMISSIONS___
               {
                 "type": 1,
                 "string": "ads_data_redaction"
+              },
+              {
+                "type": 1,
+                "string": "url_passthrough"
+              },
+              {
+                "type": 1,
+                "string": "developer_id.dOThhZD"
               }
             ]
           }
@@ -788,6 +951,27 @@ ___WEB_PERMISSIONS___
       "isEditedByUser": true
     },
     "isRequired": true
+  },
+  {
+    "instance": {
+      "key": {
+        "publicId": "logging",
+        "versionId": "1"
+      },
+      "param": [
+        {
+          "key": "environments",
+          "value": {
+            "type": 1,
+            "string": "debug"
+          }
+        }
+      ]
+    },
+    "clientAnnotations": {
+      "isEditedByUser": true
+    },
+    "isRequired": true
   }
 ]
 
@@ -824,3 +1008,5 @@ scenarios:
 ___NOTES___
 
 Created on 28/06/2022, 11:34:02
+
+
