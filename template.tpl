@@ -264,16 +264,21 @@ if (consentModeEnabled !== false) {
 
     // Get default consent state per region
     const getConsentRegionData = (regionObject) => {
-        const regionArr = getRegionArr(regionObject.region);
-      
-        return {
-            region: regionArr,
+        const consentRegionData = {
             ad_storage: regionObject.defaultConsentMarketing,
             analytics_storage: regionObject.defaultConsentStatistics,
             functionality_storage: regionObject.defaultConsentPreferences,
             personalization_storage: regionObject.defaultConsentPreferences,
             security_storage: 'granted'
         };
+      
+        const regionArr = getRegionArr(regionObject.region);
+      
+        if (regionArr.length) {
+          consentRegionData.region = regionArr;
+        }
+        
+        return consentRegionData;
     };
 
     // Set url_passthrough
@@ -291,7 +296,7 @@ if (consentModeEnabled !== false) {
         }
 
         setDefaultConsentState(consentRegionData);
-        if (regionObj.region.trim() === '')
+        if (regionObj.region === undefined || regionObj.region.trim() === '')
         {
           hasDefaultState = true;
         }
