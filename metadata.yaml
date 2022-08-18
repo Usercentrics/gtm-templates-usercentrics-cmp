@@ -1,10 +1,12 @@
 homepage: "https://www.usercentrics.com"
 documentation: "https://docs.usercentrics.com/#/gtm-templates"
 versions:
-  # Latest version
+  # Latest version  
+  - sha: 3f90598cad20927359ef3fe1e60a4e81eae21ab3
+    changeNotes: Implemented new Google Consent Mode changes  
+  # Older versions
   - sha: 8e369861f8b23ebe267c12d3bf48852e4d29e691
     changeNotes: Added support to updateConsentState and gtagSet API
-  # Older versions
   - sha: cd07d5b38cf89e08d73aa0fcd4e1a964f16a6689
     changeNotes: Fixed helper text for one field
   - sha: c6049ccc62b41d669d2f7536235cc80cbec0983b
