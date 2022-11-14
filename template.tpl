@@ -353,18 +353,18 @@ let scriptUrl = 'https://app.usercentrics.eu/browser-ui/latest/loader.js';
 
 setInWindow('settingsId', settingsId);
 
-if (defaultLanguage !== 'auto' && queryPermission('access_globals', 'language'))
+if (defaultLanguage !== 'auto' && queryPermission('access_globals', 'readwrite', 'language'))
 {
   setInWindow('language', defaultLanguage);
 }
 
 
-if (isTcfEnabled && queryPermission('access_globals', 'tcfEnabled'))
+if (isTcfEnabled && queryPermission('access_globals', 'readwrite', 'tcfEnabled'))
 {
   setInWindow('tcfEnabled', true);
 }
 
-if (isAmpEnabled && queryPermission('access_globals', 'ampEnabled'))
+if (isAmpEnabled && queryPermission('access_globals', 'readwrite', 'ampEnabled'))
 {
   setInWindow('ampEnabled', true);
 }
