@@ -5,7 +5,6 @@ Template Gallery Developer Terms of Service available at
 https://developers.google.com/tag-manager/gallery-tos (or such other URL as
 Google may provide), as modified from time to time.
 
-
 ___INFO___
 
 {
@@ -30,16 +29,58 @@ ___TEMPLATE_PARAMETERS___
 
 [
   {
+    "type": "RADIO",
+    "name": "id-selection",
+    "displayName": "Add your Setting-ID or your Ruleset-ID to display the CMP configurations to users based on their location.",
+    "radioItems": [
+      {
+        "value": "settingsId",
+        "displayValue": "Setting-ID"
+      },
+      {
+        "value": "rulesetId",
+        "displayValue": "Ruleset-ID"
+      }
+    ],
+    "simpleValueType": true
+  },
+  {
     "type": "TEXT",
     "name": "data-settings-id",
-    "displayName": "Settings Id",
+    "displayName": "Setting-ID",
     "simpleValueType": true,
     "valueValidators": [
       {
         "type": "NON_EMPTY"
       }
     ],
-    "help": "Your settings Id"
+    "help": "Your settings Id",
+    "enablingConditions": [
+      {
+        "paramName": "id-selection",
+        "paramValue": "settingsId",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "type": "TEXT",
+    "name": "data-ruleset-id",
+    "displayName": "Ruleset-ID",
+    "simpleValueType": true,
+    "valueValidators": [
+      {
+        "type": "NON_EMPTY"
+      }
+    ],
+    "help": "Your ruleset Id",
+    "enablingConditions": [
+      {
+        "paramName": "id-selection",
+        "paramValue": "rulesetId",
+        "type": "EQUALS"
+      }
+    ]
   },
   {
     "type": "TEXT",
@@ -240,7 +281,9 @@ const logToConsole = require('logToConsole');
 
 const isTcfEnabled = data['data-tcf-enabled'];
 const defaultLanguage = data['data-language'];
+const isRulesetEnabled = data['id-selection'] === 'rulesetId';
 const settingsId = data['data-settings-id'];
+const rulesetId = data['data-ruleset-id'];
 const isAmpEnabled = data['data-amp-enabled'];
 const consentModeEnabled = data.consentModeEnabled;
 const regionSettings = data.regionSettings || [];
@@ -351,7 +394,11 @@ if (consentModeEnabled !== false) {
   
 let scriptUrl = 'https://app.usercentrics.eu/browser-ui/latest/loader.js';
 
-setInWindow('settingsId', settingsId);
+if (isRulesetEnabled) {
+  setInWindow('rulesetId', rulesetId);
+} else {
+  setInWindow('settingsId', settingsId);
+}
 
 if (defaultLanguage !== 'auto' && queryPermission('access_globals', 'language'))
 {
@@ -637,6 +684,45 @@ ___WEB_PERMISSIONS___
                   {
                     "type": 1,
                     "string": "dataLayer"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  }
+                ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "rulesetId"
                   },
                   {
                     "type": 8,
@@ -988,6 +1074,7 @@ scenarios:
   code: |-
     const mockData = {
       // Mocked field values
+      'id-selection': 'settingsId',
       'data-settings-id': 'GVl-ixMH'
     };
 
@@ -996,10 +1083,11 @@ scenarios:
 
     // Verify that the script was injected
     assertApi('injectScript').wasCalled();
-- name: Window injection test
+- name: Test settingId injection
   code: |-
     const mockData = {
       // Mocked field values
+      'id-selection': 'settingsId',
       'data-settings-id': 'GVl-ixMH'
     };
 
@@ -1007,7 +1095,20 @@ scenarios:
     runCode(mockData);
 
     // Verify that the tag finished successfully.
-    assertApi('setInWindow').wasCalled();
+    assertApi('setInWindow').wasCalledWith('settingsId', mockData['data-settings-id']);
+- name: Test ruleset injection
+  code: |-
+    const mockData = {
+      // Mocked field values
+      'id-selection': 'rulesetId',
+      'data-ruleset-id': 'Q1pG5j-W5pgWef'
+    };
+
+    // Call runCode to run the template's code.
+    runCode(mockData);
+
+    // Verify that the tag finished successfully.
+    assertApi('setInWindow').wasCalledWith('rulesetId', mockData['data-ruleset-id']);
 
 
 ___NOTES___
