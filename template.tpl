@@ -229,7 +229,7 @@ ___TEMPLATE_PARAMETERS___
                 "param": {
                   "type": "SELECT",
                   "name": "defaultConsentMarketing",
-                  "displayName": "Marketing (ad_storage)",
+                  "displayName": "Marketing (ad_storage, ad_personalization and ad_user_data)",
                   "selectItems": [
                     {
                       "value": "denied",
@@ -309,6 +309,8 @@ if (consentModeEnabled !== false) {
     const getConsentRegionData = (regionObject) => {
         const consentRegionData = {
             ad_storage: regionObject.defaultConsentMarketing,
+            ad_personalization: regionObject.defaultConsentMarketing,
+            ad_user_data: regionObject.defaultConsentMarketing,
             analytics_storage: regionObject.defaultConsentStatistics,
             functionality_storage: regionObject.defaultConsentPreferences,
             personalization_storage: regionObject.defaultConsentPreferences,
@@ -348,7 +350,7 @@ if (consentModeEnabled !== false) {
     // Fallback to opt-out if no global default consent state has been defined in region settings
     if(!hasDefaultState)
     {
-      setDefaultConsentState({ad_storage: 'denied', analytics_storage: 'denied', functionality_storage: 'denied', personalization_storage: 'denied', security_storage: 'granted'});
+      setDefaultConsentState({ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'denied', functionality_storage: 'denied', personalization_storage: 'denied', security_storage: 'granted'});
     }
     
 
@@ -359,9 +361,11 @@ if (consentModeEnabled !== false) {
         ucGcmData = JSON.parse(ucGcmString);
     }
     if (typeof ucGcmData === 'object') {
-        if (ucGcmData.adStorage && ucGcmData.analyticsStorage) {
+        if (ucGcmData.adStorage && ucGcmData.analyticsStorage && ucGcmData.adPersonalization && ucGcmData.adUserData) {
             updateConsentState({
             ad_storage: ucGcmData.adStorage,
+            ad_personalization: ucGcmData.adPersonalization,
+            ad_user_data: ucGcmData.adUserData,
             analytics_storage: ucGcmData.analyticsStorage
             });
             
@@ -400,22 +404,23 @@ if (isRulesetEnabled) {
   setInWindow('settingsId', settingsId);
 }
 
-if (defaultLanguage !== 'auto' && queryPermission('access_globals', 'language'))
+if (defaultLanguage !== 'auto' && queryPermission('access_globals', 'readwrite', 'language'))
 {
   setInWindow('language', defaultLanguage);
 }
 
 
-if (isTcfEnabled && queryPermission('access_globals', 'tcfEnabled'))
+if (isTcfEnabled && queryPermission('access_globals', 'readwrite', 'tcfEnabled'))
 {
   setInWindow('tcfEnabled', true);
 }
 
-if (isAmpEnabled && queryPermission('access_globals', 'ampEnabled'))
+if (isAmpEnabled && queryPermission('access_globals', 'readwrite', 'ampEnabled'))
 {
   setInWindow('ampEnabled', true);
 }
 
+setInWindow('disableGcmDefaults', true);
 
 if (queryPermission('inject_script', scriptUrl)) {
   injectScript(scriptUrl, data.gtmOnSuccess, data.gtmOnFailure);
@@ -810,6 +815,68 @@ ___WEB_PERMISSIONS___
                 "mapValue": [
                   {
                     "type": 1,
+                    "string": "ad_personalization"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  }
+                ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "consentType"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "ad_user_data"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  }
+                ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "consentType"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
                     "string": "analytics_storage"
                   },
                   {
@@ -1114,5 +1181,3 @@ scenarios:
 ___NOTES___
 
 Created on 28/06/2022, 11:34:02
-
-
