@@ -420,7 +420,10 @@ if (isAmpEnabled && queryPermission('access_globals', 'readwrite', 'ampEnabled')
   setInWindow('ampEnabled', true);
 }
 
-setInWindow('disableGcmDefaults', true);
+if (queryPermission('access_globals', 'readwrite', 'disableGcmDefaults'))
+{
+  setInWindow('disableGcmDefaults', true);
+}
 
 if (queryPermission('inject_script', scriptUrl)) {
   injectScript(scriptUrl, data.gtmOnSuccess, data.gtmOnFailure);
@@ -742,7 +745,46 @@ ___WEB_PERMISSIONS___
                     "boolean": true
                   }
                 ]
-              }
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "disableGcmDefaults"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  }
+                ]
+              },
             ]
           }
         }
