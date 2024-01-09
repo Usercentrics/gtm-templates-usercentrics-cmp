@@ -229,7 +229,7 @@ ___TEMPLATE_PARAMETERS___
                 "param": {
                   "type": "SELECT",
                   "name": "defaultConsentMarketing",
-                  "displayName": "Marketing (ad_storage, ad_personalization and ad_user_data)",
+                  "displayName": "Marketing (ad_storage)",
                   "selectItems": [
                     {
                       "value": "denied",
@@ -245,7 +245,49 @@ ___TEMPLATE_PARAMETERS___
                   "help": "Select default consent state for marketing tags"
                 },
                 "isUnique": false
-              }
+              },
+              {
+                "param": {
+                  "type": "SELECT",
+                  "name": "defaultAdPersonalization",
+                  "displayName": "Marketing (ad_personalization)",
+                  "selectItems": [
+                    {
+                      "value": "denied",
+                      "displayValue": "Denied"
+                    },
+                    {
+                      "value": "granted",
+                      "displayValue": "Granted"
+                    }
+                  ],
+                  "simpleValueType": true,
+                  "defaultValue": "denied",
+                  "help": "Select default consent state for marketing cookies"
+                },
+                "isUnique": false
+              },
+              {
+                "param": {
+                  "type": "SELECT",
+                  "name": "defaultAdUserData",
+                  "displayName": "Marketing (ad_user_data)",
+                  "selectItems": [
+                    {
+                      "value": "denied",
+                      "displayValue": "Denied"
+                    },
+                    {
+                      "value": "granted",
+                      "displayValue": "Granted"
+                    }
+                  ],
+                  "simpleValueType": true,
+                  "defaultValue": "denied",
+                  "help": "Select default consent state for marketing cookies"
+                },
+                "isUnique": false
+              },
             ],
             "editRowTitle": "Edit region",
             "newRowButtonText": "Add region",
@@ -309,8 +351,8 @@ if (consentModeEnabled !== false) {
     const getConsentRegionData = (regionObject) => {
         const consentRegionData = {
             ad_storage: regionObject.defaultConsentMarketing,
-            ad_personalization: regionObject.defaultConsentMarketing,
-            ad_user_data: regionObject.defaultConsentMarketing,
+            ad_personalization: regionObject.defaultAdPersonalization,
+            ad_user_data: regionObject.defaultAdUserData,
             analytics_storage: regionObject.defaultConsentStatistics,
             functionality_storage: regionObject.defaultConsentPreferences,
             personalization_storage: regionObject.defaultConsentPreferences,
