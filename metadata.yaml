@@ -2,9 +2,11 @@ homepage: "https://www.usercentrics.com"
 documentation: "https://docs.usercentrics.com/#/gtm-templates"
 versions:
   # Latest version
+  - sha: cbb2142838258a0b4a3a86e45db1e2fe4098a541
+    changeNotes: Consent Mode V2 updates
+  # Older versions
   - sha: 54e8f5a7b1c989a001c906c7c6e49162331c1dae
     changeNotes: Added support for geolocation using ruleset-id
-  # Older versions
   - sha: 3f90598cad20927359ef3fe1e60a4e81eae21ab3
     changeNotes: Implemented new Google Consent Mode changes
   - sha: 8e369861f8b23ebe267c12d3bf48852e4d29e691
