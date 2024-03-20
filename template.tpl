@@ -93,9 +93,9 @@ ___TEMPLATE_PARAMETERS___
   {
     "type": "CHECKBOX",
     "name": "data-tcf-enabled",
-    "checkboxText": "Enable Transparency \u0026 Consent Framework 2.0 (TCF)",
+    "checkboxText": "Enable Transparency \u0026 Consent Framework 2.2 (TCF)",
     "simpleValueType": true,
-    "help": "Sets whether TCF 2.0 is enabled or not"
+    "help": "Sets whether TCF 2.2 is enabled or not"
   },
   {
     "type": "CHECKBOX",
