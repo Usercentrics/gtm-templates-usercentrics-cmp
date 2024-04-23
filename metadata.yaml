@@ -2,9 +2,11 @@ homepage: "https://www.usercentrics.com"
 documentation: "https://docs.usercentrics.com/#/gtm-templates"
 versions:
   # Latest version
+  - sha: 07726fb2a88ec693a58fc4685407ab900d2b18fb
+    changeNotes: Updated TCF 2.2 information
+  # Older versions
   - sha: cbb2142838258a0b4a3a86e45db1e2fe4098a541
     changeNotes: Consent Mode V2 updates
-  # Older versions
   - sha: 54e8f5a7b1c989a001c906c7c6e49162331c1dae
     changeNotes: Added support for geolocation using ruleset-id
   - sha: 3f90598cad20927359ef3fe1e60a4e81eae21ab3
