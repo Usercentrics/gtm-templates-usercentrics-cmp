@@ -83,6 +83,23 @@ ___TEMPLATE_PARAMETERS___
     ]
   },
   {
+    "type": "SELECT",
+    "name": "data-banner-version",
+    "displayName": "Banner version",
+    "selectItems": [
+      {
+        "value": V2,
+        "displayValue": "V2"
+      },
+      {
+        "value": V3,
+        "displayValue": "V3"
+      }
+    ],
+    "defaultValue": "V2",
+    "help": "Here you can choose which version of our CMP that you want to use. V3 is the newest, most performant version."
+  },
+  {
     "type": "TEXT",
     "name": "data-language",
     "displayName": "Default Language",
@@ -164,6 +181,21 @@ ___TEMPLATE_PARAMETERS___
         "checkboxText": "Enable URL passthrough",
         "simpleValueType": true,
         "help": "When using URL passthrough, a few query parameters may be appended to links as users navigate through pages on your website"
+      },
+      {
+        "type": "CHECKBOX",
+        "name": "advertiserConsentMode",
+        "checkboxText": "Advertiser Consent Mode",
+        "simpleValueType": true,
+        "help": "If enabled, Google will deduce consents from TCF",
+        "defaultValue": true,
+        "enablingConditions": [
+          {
+            "paramName": "consentModeEnabled",
+            "paramValue": true,
+            "type": "EQUALS"
+          }
+        ]
       },
       {
         "type": "GROUP",
@@ -332,6 +364,8 @@ const regionSettings = data.regionSettings || [];
 const urlPassthrough = data.urlPassthrough;
 const waitForUpdate = data.waitForUpdate;
 const adsDataRedaction = data.adsDataRedaction;
+const bannerVersion = data['data-banner-version'];
+const advertiserConsentMode = data.advertiserConsentMode;
 let hasDefaultState = false;
 
 // Set developer ID
@@ -437,43 +471,93 @@ if (consentModeEnabled !== false) {
     
 }
 
-  
-let scriptUrl = 'https://app.usercentrics.eu/browser-ui/latest/loader.js';
 
-if (isRulesetEnabled) {
-  setInWindow('rulesetId', rulesetId);
+
+if (bannerVersion === 'V3') {
+
+  const scriptUrl = 'https://web.cmp.usercentrics.eu/ui/loader.js';
+  const V3TcfStubUrl = 'https://web.cmp.usercentrics.eu/tcf/stub.js';
+
+
+  const ucCmpGTMConfig = {};
+
+  if (settingsId) {
+    ucCmpGTMConfig['settingsId'] = settingsId;
+  }
+
+  if (rulesetId) {
+    ucCmpGTMConfig['rulesetId'] = rulesetId;
+  }
+
+  if (defaultLanguage !== 'auto' && queryPermission('access_globals', 'readwrite', 'language')) {
+    ucCmpGTMConfig['language'] = defaultLanguage;
+  }
+
+  if (queryPermission('access_globals', 'readwrite', 'disableGcmDefaults')) {
+    ucCmpGTMConfig['disableGcmDefaults'] = true;
+  }
+
+  if (isTcfEnabled && consentModeEnabled && queryPermission('access_globals', 'readwrite', 'advertiserConsentMode')) {
+    ucCmpGTMConfig['advertiserConsentMode'] = advertiserConsentMode;
+  }
+
+  if (queryPermission('access_globals', 'readwrite', 'ucCmpGTMConfig')) {
+    setInWindow('ucCmpGTMConfig', ucCmpGTMConfig);
+  }
+
+  if (isTcfEnabled && queryPermission('inject_script', V3TcfStubUrl)) {
+    injectScript(V3TcfStubUrl, data.gtmOnSuccess, data.gtmOnFailure);
+  }
+
+  if (queryPermission('inject_script', scriptUrl)) {
+    injectScript(scriptUrl, data.gtmOnSuccess, data.gtmOnFailure);
+  } else {
+    data.gtmOnFailure();
+  }
+
 } else {
-  setInWindow('settingsId', settingsId);
+
+  const scriptUrl = 'https://app.usercentrics.eu/browser-ui/latest/loader.js';
+
+  if (isRulesetEnabled) {
+    setInWindow('rulesetId', rulesetId);
+  } else {
+    setInWindow('settingsId', settingsId);
+  }
+
+  if (defaultLanguage !== 'auto' && queryPermission('access_globals', 'readwrite', 'language'))
+  {
+    setInWindow('language', defaultLanguage);
+  }
+
+
+  if (isTcfEnabled && queryPermission('access_globals', 'readwrite', 'tcfEnabled'))
+  {
+    setInWindow('tcfEnabled', true);
+  }
+
+  if (isTcfEnabled && consentModeEnabled && queryPermission('access_globals', 'readwrite', 'advertiserConsentMode'))
+  {
+    setInWindow('advertiserConsentMode', advertiserConsentMode);
+  } 
+
+  if (isAmpEnabled && queryPermission('access_globals', 'readwrite', 'ampEnabled'))
+  {
+    setInWindow('ampEnabled', true);
+  }
+
+  if (queryPermission('access_globals', 'readwrite', 'disableGcmDefaults'))
+  {
+    setInWindow('disableGcmDefaults', true);
+  }
+
+  if (queryPermission('inject_script', scriptUrl)) {
+    injectScript(scriptUrl, data.gtmOnSuccess, data.gtmOnFailure);
+  } else {
+    data.gtmOnFailure();
+  }
+
 }
-
-if (defaultLanguage !== 'auto' && queryPermission('access_globals', 'readwrite', 'language'))
-{
-  setInWindow('language', defaultLanguage);
-}
-
-
-if (isTcfEnabled && queryPermission('access_globals', 'readwrite', 'tcfEnabled'))
-{
-  setInWindow('tcfEnabled', true);
-}
-
-if (isAmpEnabled && queryPermission('access_globals', 'readwrite', 'ampEnabled'))
-{
-  setInWindow('ampEnabled', true);
-}
-
-if (queryPermission('access_globals', 'readwrite', 'disableGcmDefaults'))
-{
-  setInWindow('disableGcmDefaults', true);
-}
-
-if (queryPermission('inject_script', scriptUrl)) {
-  injectScript(scriptUrl, data.gtmOnSuccess, data.gtmOnFailure);
-} else {
-  data.gtmOnFailure();
-}
-
-
 ___WEB_PERMISSIONS___
 
 [
@@ -492,6 +576,10 @@ ___WEB_PERMISSIONS___
               {
                 "type": 1,
                 "string": "https://app.usercentrics.eu/*"
+              },
+              {
+                "type": 1,
+                "string": "https://web.cmp.usercentrics.eu/*"
               }
             ]
           }
@@ -827,6 +915,84 @@ ___WEB_PERMISSIONS___
                   }
                 ]
               },
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "advertiserConsentMode"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  }
+                ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "ucCmpGTMConfig"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  }
+                ]
+              }
             ]
           }
         }
