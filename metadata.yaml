@@ -2,9 +2,11 @@ homepage: "https://www.usercentrics.com"
 documentation: "https://docs.usercentrics.com/#/gtm-templates"
 versions:
   # Latest version
+  - sha: 48cd4b6c089d3784e1be7cdbd6c9af07abe1c9e6
+    changeNotes: Added V3 banner option and Advertiser Consent Mode toggle
+  # Older versions
   - sha: 07726fb2a88ec693a58fc4685407ab900d2b18fb
     changeNotes: Updated TCF 2.2 information
-  # Older versions
   - sha: cbb2142838258a0b4a3a86e45db1e2fe4098a541
     changeNotes: Consent Mode V2 updates
   - sha: 54e8f5a7b1c989a001c906c7c6e49162331c1dae
