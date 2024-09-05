@@ -106,7 +106,8 @@ ___VENDOR_DETAILS___
     "IOS",
     "ANDROID",
     "AMP"
-  ]
+  ],
+  "defaultSettingsUrl": "https://usercentricssupport.zendesk.com/hc/en-us/articles/15654847514780-Usercentrics-CMP-default-banner-settings"
 }
 
 
