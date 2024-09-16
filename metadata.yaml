@@ -2,9 +2,11 @@ homepage: "https://www.usercentrics.com"
 documentation: "https://docs.usercentrics.com/#/gtm-templates"
 versions:
   # Latest version
+  - sha: aa93be5daca448323fcc62a71861a2afd172ead0
+    changeNotes: Added final template update
+  # Older versions
   - sha: 578b7c773702b4255a05bb1b4bce324b22b1a74f
     changeNotes: Added default settings url to vendor details
-  # Older versions
   - sha: 8f231bd5ba5d27a135283c77197ceade1a3f979e
     changeNotes: Updated Usercentrics Vendor details
   - sha: 5188229661b577c29f3dbef8b83c83c814790468
