@@ -2,9 +2,11 @@ homepage: "https://www.usercentrics.com"
 documentation: "https://docs.usercentrics.com/#/gtm-templates"
 versions:
   # Latest version
+  - sha: 9e0c1b617840db208b5297de1daa5cf8bfe2bd5d
+    changeNotes: Updated default banner version to V3
+  # Older versions
   - sha: aa93be5daca448323fcc62a71861a2afd172ead0
     changeNotes: Added final template update
-  # Older versions
   - sha: 578b7c773702b4255a05bb1b4bce324b22b1a74f
     changeNotes: Added default settings url to vendor details
   - sha: 8f231bd5ba5d27a135283c77197ceade1a3f979e
