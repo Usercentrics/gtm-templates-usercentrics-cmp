@@ -185,7 +185,7 @@ ___TEMPLATE_PARAMETERS___
         "displayValue": "V3"
       }
     ],
-    "defaultValue": "V2",
+    "defaultValue": "V3",
     "help": "Here you can choose which version of our CMP that you want to use. V3 is the newest, most performant version."
   },
   {
