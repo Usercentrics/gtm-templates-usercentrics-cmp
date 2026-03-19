@@ -199,9 +199,9 @@ ___TEMPLATE_PARAMETERS___
   {
     "type": "CHECKBOX",
     "name": "data-tcf-enabled",
-    "checkboxText": "Enable Transparency \u0026 Consent Framework 2.2 (TCF)",
+    "checkboxText": "Enable IAB Transparency and Consent Framework (TCF)",
     "simpleValueType": true,
-    "help": "Sets whether TCF 2.2 is enabled or not"
+    "help": "Enable IAB Europe's Transparency & Consent Framework if your site is displaying ads from one or more IAB Vendors"
   },
   {
     "type": "CHECKBOX",
