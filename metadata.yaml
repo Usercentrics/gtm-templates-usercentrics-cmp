@@ -2,9 +2,11 @@ homepage: "https://www.usercentrics.com"
 documentation: "https://docs.usercentrics.com/#/gtm-templates"
 versions:
   # Latest version
+  - sha: 415eb10e7ee3472979696a5f5eecfc2fa78cbe78
+    changeNotes: Updated TCF labels
+  # Older versions
   - sha: 9e0c1b617840db208b5297de1daa5cf8bfe2bd5d
     changeNotes: Updated default banner version to V3
-  # Older versions
   - sha: aa93be5daca448323fcc62a71861a2afd172ead0
     changeNotes: Added final template update
   - sha: 578b7c773702b4255a05bb1b4bce324b22b1a74f
